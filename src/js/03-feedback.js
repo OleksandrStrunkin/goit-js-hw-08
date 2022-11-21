@@ -10,16 +10,19 @@ let formData = {};
 
 form.addEventListener(`submit`, onFormSubmit);
 
-populateTextarea();
-populateMail();
+
 
 form.addEventListener(`input`, throttle(addLocal, 500))
 
-function addLocal(e) {
-    formData[e.target.name] = e.target.value;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData))
-}
+populateData();
 
+function addLocal(e) {
+    const email = mailForm.value;
+    const message = textArea.value;
+    formData = { email, message };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+
+}
 
 function onFormSubmit(e) {
     e.preventDefault();
@@ -33,24 +36,11 @@ function onFormSubmit(e) {
     localStorage.removeItem(STORAGE_KEY)
 };
 
-
-// function onTextareaInput(e) {
-//     const message = e.target.value;
-//     // localStorage.setItem(STORAGE_KEY, message)
-// };
-
-function populateTextarea() {
-    const savedMessage = localStorage.getItem(STORAGE_KEY)
-    const message = JSON.parse(savedMessage)
-    if (savedMessage) {
-        textArea.value = message.message;
-    }
-}
-
-function populateMail() {
-    const savedMail = localStorage.getItem(STORAGE_KEY)
-    const mail = JSON.parse(savedMail)
-    if (savedMail) {
-        mailForm.value = mail.email;
+function populateData() {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    const data = JSON.parse(savedData);
+    if (savedData) {
+        textArea.value = data.message;
+        mailForm.value = data.email;
     }
 }
